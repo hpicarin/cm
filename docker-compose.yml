@@ -1,53 +1,43 @@
 version: '3.8'
 services:
-  db_pg:    
-    container_name: cicujae-db
-    image: docker.uclv.cu/postgres
-    #restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - 5432:5432
-    volumes: 
-      - db_pg:/var/lib/postgresql/data
-      #- ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
-      - ./cicujae_db/personal.sql:/docker-entrypoint-initdb.d/create_tables.sql
-    networks: 
-      net: 
-        ipv4_address: 172.16.0.10 
-  piotai_app:
-    build: ./nr
-    container_name: piotai_nodered
-    ports: 
-      - 1880:1880
-    networks: 
-      net: 
-        ipv4_address: 172.16.0.4
-    depends_on:
-      - piotai_db
-    #volumes:
-    #  - pt_nr:/data
-  piotai_client:
-    build: ./node
-    container_name: piotai_nodejs
-    ports: 
-      - 8081:4000
-    networks: 
-      net: 
-        ipv4_address: 172.16.0.5
-    depends_on:
-      - piotai_app
+    app:
+        image: 'docker-spring-boot-postgres:latest'
+        build:
+            context: .
+        container_name: app
+        depends_on:
+            - db
+        environment:
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=P@s5
+            - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/demo
+            - SPRING_DATASOURCE_USERNAME=root
+            - SPRING_DATASOURCE_PASSWORD=P@s5
+            - SPRING_JPA_HIBERNATE_DDL_AUTO=update    
+        ports:
+            - 8080:8080
+    db_sql:
+        image: mysql/mysql-server:latest
+        container_name: db_sql
+        environment:
+            - MYSQL_ROOT_PASSWORD=P@s5
+            - MYSQL_DATABASE=demo
+        ports: 
+            - 3306:3306
+        volumes:
+            - ./demo_sql.sql /docker-entrypoint-initdb.d
+    citas_app:
+        build: ./front
+        container_name: citas_app
+        ports: 
+            - 3000:3000
+        volumes:
+            - './:/app'
+            - '/app/node_modules'
+        depends_on:
+            - db_sql
 volumes:
-  db_sql:
-    driver: local
-  pt_nr:
-    driver: local
-networks: 
-  net:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.16.0.0/24
-          gateway: 172.16.0.1
+    db_sql:
+        driver: local
+    citas_app:
+        driver: local
