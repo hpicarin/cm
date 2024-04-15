@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  db_pg:    
+    container_name: cicujae-db
+    image: docker.uclv.cu/postgres
+    #restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes: 
+      - db_pg:/var/lib/postgresql/data
+      #- ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./cicujae_db/personal.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    networks: 
+      net: 
+        ipv4_address: 172.16.0.10 
+  piotai_app:
+    build: ./nr
+    container_name: piotai_nodered
+    ports: 
+      - 1880:1880
+    networks: 
+      net: 
+        ipv4_address: 172.16.0.4
+    depends_on:
+      - piotai_db
+    #volumes:
+    #  - pt_nr:/data
+  piotai_client:
+    build: ./node
+    container_name: piotai_nodejs
+    ports: 
+      - 8081:4000
+    networks: 
+      net: 
+        ipv4_address: 172.16.0.5
+    depends_on:
+      - piotai_app
+volumes:
+  db_sql:
+    driver: local
+  pt_nr:
+    driver: local
+networks: 
+  net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.1

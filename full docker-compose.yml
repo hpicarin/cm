@@ -1,0 +1,68 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15.2-alpine3.17
+    restart: always
+    environment:
+      - POSTGRES_USER=walrus
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./src/test/resources/db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+  pg_db:    
+    container_name: pg_db
+    image: docker.uclv.cu/postgres
+    #restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes: 
+      - db_pg:/var/lib/postgresql/data
+      - ./cicujae_db/personal.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    networks: 
+      net: 
+        ipv4_address: 172.16.0.10 
+  citas_app:
+    build: ./nr
+    container_name: citas_app
+    ports: 
+      - 1880:1880
+    networks: 
+      net: 
+        ipv4_address: 172.16.0.4
+    depends_on:
+      - piotai_db
+    #volumes:
+    #  - pt_nr:/data
+  piotai_client:
+    build: ./node
+    container_name: piotai_nodejs
+    ports: 
+      - 8081:4000
+    networks: 
+      net: 
+        ipv4_address: 172.16.0.5
+    depends_on:
+      - piotai_app
+volumes:
+  db_sql:
+    driver: local
+  pt_nr:
+    driver: local
+networks: 
+  net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.1

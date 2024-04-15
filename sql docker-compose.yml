@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db_sql:
+    image: mysql/mysql-server:latest
+    container_name: db_sql
+    environment:
+        - MYSQL_ROOT_PASSWORD=P@s5
+        - MYSQL_DATABASE=demo
+    ports: 
+        - 3306:3306
+    volumes:
+        - ./demo_sql.sql /docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+  citas_app:
+    build: ./front
+    container_name: citas_app
+    ports: 
+      - 3000:3000
+    volumes:
+      - './:/app'
+      - '/app/node_modules'
+    depends_on:
+      - db_sql
+volumes:
+  db_sql:
+    driver: local
+  citas_app:
+    driver: local
