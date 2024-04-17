@@ -15,7 +15,7 @@ services:
         ports:
             - 8080:8080
         volumes:
-            - './back:/app'
+            - './back:/data'
     db_sql:
         image: mysql/mysql-server:latest
         container_name: db_sql
