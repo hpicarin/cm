@@ -2,8 +2,6 @@ version: '3.8'
 services:
     app:
         image: 'docker-spring-boot-postgres:latest'
-        build:
-            context: .
         container_name: app
         depends_on:
             - db
@@ -16,6 +14,8 @@ services:
             - SPRING_JPA_HIBERNATE_DDL_AUTO=update    
         ports:
             - 8080:8080
+        volumes:
+            - './back:/app'
     db_sql:
         image: mysql/mysql-server:latest
         container_name: db_sql
@@ -40,4 +40,6 @@ volumes:
     db_sql:
         driver: local
     citas_app:
+        driver: local
+    app:
         driver: local
