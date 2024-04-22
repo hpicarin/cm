@@ -9,7 +9,7 @@ services:
         ports: 
             - 3325:3306
         volumes:
-            - ./demo_sql.sql /docker-entrypoint-initdb.d
+            - './db:/docker-entrypoint-initdb.d'
 volumes:
   db_sql:
     driver: local
