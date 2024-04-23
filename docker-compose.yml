@@ -25,7 +25,7 @@ services:
         ports: 
             - 3306:3306
         volumes:
-            - ./demo_sql.sql /docker-entrypoint-initdb.d
+            - './db:/docker-entrypoint-initdb.d'
     citas_app:
         build: ./front
         container_name: citas_app
