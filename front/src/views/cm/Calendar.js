@@ -84,15 +84,11 @@ const CCalendar = () => {
     }
 
     const saveApp = () => {
-      console.log('AQUI', eventdata);
-      /*AppService.createApp(app).then((res) => {
-        AppService.getApps().then((res) => {
-          setuserData(res.data);
-        });
-      });*/
+      console.log('test print', eventdata);
     }
 
     const updateApp = () => {
+      //save changes of event
       console.log(eventdata.event);
 
       eventdata.event['startD'] = new Date(eventdata.event.start);
@@ -101,9 +97,11 @@ const CCalendar = () => {
       console.log(eventdata.event);
 
       if (user.rol.name.toLowerCase() == 'patient') {
+        //guest user is doctor
         eventdata.event['user_d'] = { idUser: parseInt(eventdata.event.guest) };
         eventdata.event['user_p'] = { idUser: user.idUser };
       } else {
+        //guest user is patient
         eventdata.event['user_p'] = { idUser: parseInt(eventdata.event.guest) };
         eventdata.event['user_d'] = { idUser: user.idUser };
       }
@@ -126,8 +124,6 @@ const CCalendar = () => {
     }
 
     useEffect(() => {
-      //console.log(eventdata.event);
-      // default value for rol
       setType(props.type);
 
       UserService.getUsers().then((res) => {
@@ -199,33 +195,23 @@ const CCalendar = () => {
   }
 
   const onSlotChange = (slotInfo) => {
+    //create default event
     var newEvent = {
       title: 'Test Nuevo',
       start: slotInfo.start,
       end: slotInfo.end,
       type: 'new'
     }
-    var startDate = moment(slotInfo.start.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
-    var endDate = moment(slotInfo.end.toLocaleString()).format("YYYY-MM-DD HH:mm:ss");
 
     setEventsCalendar([...eventsCalendar, newEvent]);
   }
 
-  const parseCamel = (text) => {
-    if (text === undefined) {
-      return '';
-    } else {
-      return text.charAt(0).toUpperCase() + text.substring(1).toLowerCase();
-    }
-  }
-
   const parseEvent = (dataApp) => {
     var dataEvent = [];
-    dataApp.forEach(element => {
-      //console.log(element);
-      var guest = (user.idUser == element.user_p.idUser) ? element.user_d : user;
-      var nelement = { title: element.title, start: element.startD, end: element.endD, type: 'saved', guest: guest, idApp: element.idApp };
-      dataEvent.push(nelement);
+    dataApp.forEach(base_element => {
+      var guest = (user.idUser == base_element.user_p.idUser) ? base_element.user_d : user;
+      var new_element = { title: base_element.title, start: new Date(base_element.startD), end: new Date(base_element.endD), type: 'saved', guest: guest, idApp: base_element.idApp };
+      dataEvent.push(new_element);
     });
     return dataEvent;
   }
@@ -236,23 +222,6 @@ const CCalendar = () => {
       setEventsData(res.data);
       setEventsCalendar(parseEvent(res.data));
     });
-    const leaves = [];
-    leaves.push({
-      title: 'Test 1', start: moment().subtract(3, "days").toDate(), end: moment()
-        .subtract(2, "days")
-        .toDate(), color: 'Blue', type: 'leave', allDay: 'true'
-    })
-    leaves.push({
-      title: 'Test 2', start: moment().subtract(1, "days").toDate(), end: moment()
-        .toDate(), color: 'Black', type: 'ah', allDay: 'true'
-    })
-    leaves.push({
-      title: 'Test 3', start: moment().toDate(), end: moment()
-        .add(1, "days")
-        .toDate(), color: 'Red', type: 'leave', allDay: 'false'
-    })
-
-    //setEventsData(leaves);
   }, [])
 
   return (

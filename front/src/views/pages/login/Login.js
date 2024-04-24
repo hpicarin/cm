@@ -34,13 +34,6 @@ const Login = () => {
         alert("Invalid username or password");
       }
     });
-
-    /*if (username === "hp" && password === "hp") {
-      // Replace with actual authentication logic
-      await login({ username });
-    } else {
-      alert("Invalid username or password");
-    }*/
   };
 
   return (

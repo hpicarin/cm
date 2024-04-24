@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM docker.uclv.cu/openjdk:17
 VOLUME /tmp
 EXPOSE 8080
 ARG JAR_FILE=./output/control_user.jar

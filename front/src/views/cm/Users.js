@@ -50,6 +50,7 @@ const Users = () => {
     const [rolData, setrolData] = useState([]);
     const [user, setUser] = useLocalStorage("user", null);
 
+    //default avatar types
     const avatarData = [
         'avatar1',
         'avatar2',
@@ -124,7 +125,6 @@ const Users = () => {
         }
 
         useEffect(() => {
-            // default value for rol
             setType(props.type);
             if (props.type == 'edit') {
                 setIcon(cilPen)
@@ -220,12 +220,12 @@ const Users = () => {
 
     useEffect(() => {
         RolService.getRols().then((res) => {
-            //console.log(res.data);
+            //get rols of db
             setrolData(res.data);
         });
 
         UserService.getUsers().then((res) => {
-            //setuserData(res.data);
+            //filter users by logged rol
             if (user.rol.name.toLowerCase() == 'admin') {
                 setuserData(res.data);
             } else {
