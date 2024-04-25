@@ -8,12 +8,12 @@ services:
         environment:
             - MYSQL_USER=root
             - MYSQL_PASSWORD=P@s5
-            - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3325/demo
+            - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/demo
             - SPRING_DATASOURCE_USERNAME=root
             - SPRING_DATASOURCE_PASSWORD=P@s5
             - SPRING_JPA_HIBERNATE_DDL_AUTO=update    
         ports:
-            - 8081:8080
+            - 8080:8080
         volumes:
             - './back:/data'
     db_sql:
