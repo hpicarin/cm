@@ -4,12 +4,9 @@ services:
         build: ./back
         container_name: app  
         environment:
-            - MYSQL_USER=root
-            - MYSQL_PASSWORD=P@s5
-            - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/demo
-            - SPRING_DATASOURCE_USERNAME=root
-            - SPRING_DATASOURCE_PASSWORD=P@s5
-            - SPRING_JPA_HIBERNATE_DDL_AUTO=update    
+            spring.datasource.url: "jdbc:mysql://db:3325/demo?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true"
+            spring.datasource.username: "root"
+            spring.datasource.password: "P@s5"
         ports:
             - 8080:8080
         volumes:

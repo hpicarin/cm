@@ -1,31 +1,28 @@
 version: '3.8'
 services:
+    db_sql:
+        image: mysql/mysql-server:latest
+        container_name: db_sql
+        environment:
+            MYSQL_ROOT_PASSWORD: P@s5
+            MYSQL_DATABASE: demo
+        ports: 
+            - 3325:3306
+        volumes:
+            - './db:/docker-entrypoint-initdb.d'
     app:
         build: ./back
         container_name: app
         depends_on:
             - db_sql
         environment:
-            - MYSQL_USER=root
-            - MYSQL_PASSWORD=P@s5
-            - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/demo
-            - SPRING_DATASOURCE_USERNAME=root
-            - SPRING_DATASOURCE_PASSWORD=P@s5
-            - SPRING_JPA_HIBERNATE_DDL_AUTO=update    
+            spring.datasource.url: "jdbc:mysql://db_sql:3325/demo?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true"
+            spring.datasource.username: "harol"
+            spring.datasource.password: "P@s5"
         ports:
             - 8080:8080
         volumes:
             - './back:/data'
-    db_sql:
-        image: mysql/mysql-server:latest
-        container_name: db_sql
-        environment:
-            - MYSQL_ROOT_PASSWORD=P@s5
-            - MYSQL_DATABASE=demo
-        ports: 
-            - 3306:3306
-        volumes:
-            - './db:/docker-entrypoint-initdb.d'
 volumes:
   db_sql:
     driver: local
