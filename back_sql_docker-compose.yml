@@ -15,7 +15,7 @@ services:
         container_name: app
         depends_on:
             - db_sql
-        env_file: '.env'
+        env_file: './back/.env'
         ports:
             - 8080:8080
         volumes:
