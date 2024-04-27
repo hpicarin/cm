@@ -3,7 +3,6 @@ package org.example.control_user.controller;
 import org.example.control_user.entity.Rol;
 import org.example.control_user.service.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

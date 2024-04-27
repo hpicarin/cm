@@ -1,5 +1,5 @@
 # Definição de build para a imagem do Spring boot
-FROM openjdk:17
+FROM openjdk:17 as build
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN ./mvnw package -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 # Definição de produção para a imagem do Spring boot
-FROM openjdk:17
+FROM openjdk:17 as production
 ARG DEPENDENCY=/app/target/dependency
 
 # Copiar as dependencias para o build artifact
