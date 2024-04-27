@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+    citas_app:
+        container_name: citas_app
+        image: citas_app:1.0.0
+        build: ./front
+        ports: 
+            - 3000:3000
+        volumes:
+            - './:/app'
+            - '/app/node_modules'
+        depends_on:
+            - app
+volumes:
+    citas_app:
+        driver: local
