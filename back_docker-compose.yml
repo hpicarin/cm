@@ -3,10 +3,8 @@ services:
     app:
         build: ./back
         container_name: app  
-        environment:
-            spring.datasource.url: "jdbc:mysql://db_sql:3325/demo?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true"
-            spring.datasource.username: "harol"
-            spring.datasource.password: "P@s5"
+        networks:
+            - net-cm
         ports:
             - 8080:8080
         volumes:
