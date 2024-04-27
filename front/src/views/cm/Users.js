@@ -78,7 +78,11 @@ const Users = () => {
     const deleteUser = (id) => {
         UserService.deleteUser(id).then(res => {
             UserService.getUsers().then((res) => {
-                setuserData(res.data);
+                if (user.rol.name.toLowerCase() == 'admin') {
+                    setuserData(res.data);
+                } else {
+                    setuserData(res.data.filter(item => { return (item.rol.name.toLowerCase() != 'admin') & (item.rol.name.toLowerCase() != user.rol.name.toLowerCase()) }));
+                }
             });
         });
     }
@@ -111,7 +115,11 @@ const Users = () => {
             user['rol'] = { idRol: parseInt(user.rol.idRol) };
             UserService.createUser(user).then((res) => {
                 UserService.getUsers().then((res) => {
-                    setuserData(res.data);
+                    if (user.rol.name.toLowerCase() == 'admin') {
+                        setuserData(res.data);
+                    } else {
+                        setuserData(res.data.filter(item => { return (item.rol.name.toLowerCase() != 'admin') & (item.rol.name.toLowerCase() != user.rol.name.toLowerCase()) }));
+                    }
                 });
             });
         }
@@ -119,7 +127,11 @@ const Users = () => {
         const updateUser = () => {
             UserService.updateUser(user).then(res => {
                 UserService.getUsers().then((res) => {
-                    setuserData(res.data);
+                    if (user.rol.name.toLowerCase() == 'admin') {
+                        setuserData(res.data);
+                    } else {
+                        setuserData(res.data.filter(item => { return (item.rol.name.toLowerCase() != 'admin') & (item.rol.name.toLowerCase() != user.rol.name.toLowerCase()) }));
+                    }
                 });
             });
         }
