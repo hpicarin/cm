@@ -10,6 +10,8 @@ services:
             - 3325:3306
         volumes:
             - './db:/docker-entrypoint-initdb.d'
+        networks:
+            - net-cm
     app:
         build: ./back
         container_name: app
@@ -20,8 +22,13 @@ services:
             - 8080:8080
         volumes:
             - './back:/data'
+        networks:
+            - net-cm
+networks:
+    net-cm:
+        driver: bridge
 volumes:
-  db_sql:
-    driver: local
-  app:
-    driver: local
+    db_sql:
+        driver: local
+    app:
+        driver: local
