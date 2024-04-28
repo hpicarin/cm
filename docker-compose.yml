@@ -1,41 +1,35 @@
 version: '3.8'
 services:
-    db_sql:
-        container_name: db_sql
+    full_db_sql:
+        container_name: full_db_sql
         image: mysql/mysql-server:latest
         environment:
             MYSQL_ROOT_PASSWORD: P@s5
             MYSQL_DATABASE: demo
-        ports: 
+        ports:
             - 3325:3306
         volumes:
             - './db:/docker-entrypoint-initdb.d'
-    app:
-        container_name: app
-        image: cu-java_app:1.0.0
+    full_app:
+        container_name: full_app
         build: ./back
         depends_on:
-            - db_sql
+            - full_db_sql
         env_file: './back/.env'
         ports:
             - 8080:8080
-        volumes:
-            - './back:/data'
-    citas_app:
-        container_name: citas_app
-        image: citas_app:1.0.0
+    full_citas_app:
+        container_name: full_citas_app
         build: ./front
-        ports: 
+        ports:
             - 3000:3000
         volumes:
             - './:/app'
             - '/app/node_modules'
         depends_on:
-            - app
+            - full_app
 volumes:
-    db_sql:
+    full_db_sql:
         driver: local
-    citas_app:
-        driver: local
-    app:
+    full_citas_app:
         driver: local

@@ -12,17 +12,12 @@ services:
             - './db:/docker-entrypoint-initdb.d'
     app:
         container_name: app
-        image: cu-java_app:1.0.0
         build: ./back
         depends_on:
             - db_sql
         env_file: './back/.env'
         ports:
             - 8080:8080
-        volumes:
-            - './back:/data'
 volumes:
     db_sql:
-        driver: local
-    app:
         driver: local
