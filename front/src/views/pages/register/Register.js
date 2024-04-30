@@ -29,7 +29,7 @@ const Register = () => {
     e.preventDefault();
     if (password !== "" && password === repassword) {
       // Replace with actual authentication logic
-      let user = { name: name, password: password, lastname: lastname, type: 'user', country: '', avatar: '', createdAt: new Date(), rol: { idRol: 1 } };
+      let user = { name: name, password: password, lastname: lastname, type: 'user', country: 'default', avatar: 'avatar1', createdAt: new Date(), rol: { idRol: 1 } };
       UserService.createUser(user).then(res => {
         navigate("/");
       });
@@ -55,7 +55,7 @@ const Register = () => {
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
                     <CFormInput
-                      placeholder="Name"
+                      placeholder="Name or account"
                       autoComplete="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}

@@ -54,19 +54,19 @@ const CCalendar = () => {
     const [visible, setVisible] = useState(false)
     const [icon, setIcon] = useState(cilMedicalCross)
     const [type, setType] = useState('new');
-    const [guest, setGuest] = useState();
+    const [guest, setGuest] = useState({ idUser: 0 });
     const [eventdata, setEventdata] = useState(props);
     const [usersData, setusersData] = useState([]);
 
     const handleDatachanged = (event, typedata) => {
-      //console.log(event, typedata);
-
       if ((typedata == 'start') || (typedata == 'end')) {
         eventdata.event[typedata] = event;
       }
       else if (typedata == 'user') {
-        setGuest(event.target.value);
-        eventdata.event['guest'] = event.target.value;
+        var id_guest = parseInt(event.target.value);
+        setGuest({ idUser: id_guest });
+        eventdata.event['guest'] = { idUser: id_guest };
+
       } else {
         eventdata.event[typedata] = event.target.value;
       }
@@ -154,8 +154,8 @@ const CCalendar = () => {
               </CCol>
 
               <CCol md={12}>
-                <CFormLabel>User</CFormLabel>
-                <CFormSelect value={guest} onChange={(e) => handleDatachanged(e, 'user')}>
+                <CFormLabel>{user.rol.name.toLowerCase() == 'admin' ? 'User' : (user.rol.name.toLowerCase() == 'doctor' ? 'Patient' : 'Doctor')}</CFormLabel>
+                <CFormSelect value={eventdata.event.guest.idUser} onChange={(e) => handleDatachanged(e, 'user')}>
                   {usersData.map((item, index) => (
                     <option value={item.idUser} key={index}> {item.name} </option>
                   ))}
@@ -163,7 +163,7 @@ const CCalendar = () => {
               </CCol>
 
               <CCol md={12}>
-                <CFormLabel>Title</CFormLabel>
+                <CFormLabel>Diagnosis</CFormLabel>
                 <CFormInput type="text" defaultValue={eventdata.event.title} onChange={(e) => handleDatachanged(e, 'title')} required />
               </CCol>
 
@@ -200,7 +200,8 @@ const CCalendar = () => {
       title: 'Test Nuevo',
       start: slotInfo.start,
       end: slotInfo.end,
-      type: 'new'
+      type: 'new',
+      guest: { idUser: 0 }
     }
 
     setEventsCalendar([...eventsCalendar, newEvent]);
@@ -209,7 +210,7 @@ const CCalendar = () => {
   const parseEvent = (dataApp) => {
     var dataEvent = [];
     dataApp.forEach(base_element => {
-      var guest = (user.idUser == base_element.user_p.idUser) ? base_element.user_d : user;
+      var guest = (user.idUser === base_element.user_p.idUser) ? base_element.user_d : base_element.user_p;
       var new_element = { title: base_element.title, start: new Date(base_element.startD), end: new Date(base_element.endD), type: 'saved', guest: guest, idApp: base_element.idApp };
       dataEvent.push(new_element);
     });

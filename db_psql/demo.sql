@@ -1,7 +1,10 @@
 -- Adminer 4.8.1 PostgreSQL 16.2 (Debian 16.2-1.pgdg120+2) dump
 
-CREATE DATABASE demo
-\connect "demo";
+CREATE DATABASE demo;
+
+\connect demo;
+
+CREATE SCHEMA public;
 
 CREATE TABLE "public"."appointment" (
     "end_date" timestamp(6) NOT NULL,
