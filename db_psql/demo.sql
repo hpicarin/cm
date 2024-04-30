@@ -1,5 +1,6 @@
 -- Adminer 4.8.1 PostgreSQL 16.2 (Debian 16.2-1.pgdg120+2) dump
 
+CREATE DATABASE demo
 \connect "demo";
 
 CREATE TABLE "public"."appointment" (
