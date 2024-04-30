@@ -1,5 +1,18 @@
 version: '3.8'
 services:
+  db_pg:    
+    container_name: cicujae-db
+    image: docker.uclv.cu/postgres
+    #restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes: 
+      - db_pg:/var/lib/postgresql/data
+      #- ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./cicujae_db/personal.sql:/docker-entrypoint-initdb.d/create_tables.sql
   db:
     image: postgres:15.2-alpine3.17
     restart: always

@@ -1,5 +1,22 @@
 version: '3.8'
 services:
+    full_postgres:
+        container_name: full_postgres
+        image: postgres
+        environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
+        volumes:
+           - full_postgres:/data/postgres
+           - ./db_psql/demo.sql:/docker-entrypoint-initdb.d/create_tables.sql
+        ports:
+          - "5432:5432"      
+    full_adminer:
+        image: adminer:latest
+        container_name: adminer
+        restart: always
+        ports:
+          - 8888:8080
     full_db_sql:
         container_name: full_db_sql
         image: mysql/mysql-server:latest
@@ -32,4 +49,6 @@ volumes:
     full_db_sql:
         driver: local
     full_citas_app:
+        driver: local
+    full_postgres:
         driver: local
