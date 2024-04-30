@@ -1,15 +1,5 @@
 version: '3.8'
 services:
-    full_pgadmin:
-        container_name: full_pgadmin
-        image: dpage/pgadmin4
-        environment:
-          PGADMIN_DEFAULT_PASSWORD: admin
-          PGADMIN_CONFIG_SERVER_MODE: 'False'
-        volumes:
-           - full_pgadmin:/var/lib/pgadmin
-        ports:
-        - 5050:80
     full_postgres:
         container_name: full_postgres
         image: postgres
@@ -61,6 +51,4 @@ volumes:
     full_citas_app:
         driver: local
     full_postgres:
-        driver: local
-    full_pgadmin:
         driver: local
